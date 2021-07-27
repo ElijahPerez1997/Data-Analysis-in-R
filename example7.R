@@ -1,0 +1,22 @@
+sparrows<-read.csv("http://www.math.unm.edu/~luyan/ADA118/sparrow.csv")
+sparrows$survived<-factor(sparrows$survived)
+sparrows$survived
+survived<- sparrows[which(sparrows[,2]=="1"),]
+perished <- sparrows[which(sparrows[,2]=="0"),]
+hist(survived$humerus)
+boxplot(survived$humerus, main="Survived")
+hist(perished$humerus)
+boxplot(perished$humerus, main="Perished")
+t.test(sparrows$humerus)
+SIGN.test(sparrows$humerus)
+sd_1<-sd(survived$humerus)
+sd_2<-sd(perished$humerus)
+n_1<- length(survived$humerus)
+n_2<- length(perished$humerus)
+var_pooled<-((n_1-1)*(sd_1^2)+(n_2-1)*(sd_2^2))/(n_1+n_2-2)
+se_2<- sqrt(var_pooled)*sqrt((1/n_1)+(1/n_2))
+t_crit<- abs(qt(0.05/2, n_1+n_2-2))
+mean_1<-mean(survived$humerus)
+mean_2<-mean(perished$humerus)
+ci_2<- c(mean_1-mean_2-(t_crit*se_2),mean_1-mean_2+(t_crit*se_2) )
+wilcox.test(survived$humerus,perished$humerus, mu=0,conf.int = TRUE)
